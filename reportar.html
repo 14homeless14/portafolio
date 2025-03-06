@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Atención de Falla</title>
+    <link rel="stylesheet" href="estilos.css">
+    <script src="extraccionDeDatos.js"></script>
+</head>
+<body>
+    <h1>Formulario de Atención de Falla</h1>
+    <form id="fallasForm">
+        <fieldset>
+            <legend>Información General</legend>
+            <label for="numeroSucursal">Número de Sucursal:</label>
+            <input type="text" id="numeroSucursal" name="numeroSucursal" required>
+            
+            <label for="sucursal">Sucursal:</label>
+            <input type="text" id="sucursal" name="sucursal"  required>
+
+            <label for="tituloFalla">Título de la Falla:</label>
+            <input type="text" id="tituloFalla" name="tituloFalla" required>
+
+            <label for="tipoFalla">Tipo de Falla:</label>
+            <select id="tipoFalla" name="tipoFalla" required>
+                <option value="TOTAL">TOTAL</option>
+                <option value="PARCIAL">PARCIAL</option>
+                <option value="MCA">MCA</option>
+                <option value="Enlace">Enlace</option>
+                <option value="MCA REQ Serv">MCA REQ Serv</option>
+                <option value="SNR">SNR</option>
+                <option value="MASIVA">MASIVA</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Datos del Reporte</legend>
+            <label for="tuNombre">Tu Nombre:</label>
+            <select id="tuNombre" name="tuNombre" required>
+                <option value="Emmanuel Lopez">Emmanuel Lopez</option>
+                <option value="Irving Navarro">Irving Navarro</option>
+            </select>
+
+            <label for="ticketCherwell">#Ticket Cherwell:</label>
+            <input type="text" id="ticketCherwell" name="ticketCherwell" required>
+
+            <label for="folioOT">#Folio OT:</label>
+            <input type="text" id="folioOT" name="folioOT" required>
+
+            <label for="nodoPuerto">#Nodo o Puerto:</label>
+            <input type="text" id="nodoPuerto" name="nodoPuerto" required>
+        </fieldset>
+
+        <fieldset>
+            <legend>Detalles Técnicos</legend>
+            <label for="ctcHub">CTC o Hub:</label>
+            <input type="text" id="ctcHub" name="ctcHub" required>
+
+            <label for="alarma">Alarma:</label>
+            <input type="text" id="alarma" name="alarma" required>
+
+            <label for="coordenadas">Coordenadas:</label>
+            <input type="text" id="coordenadas" name="coordenadas" required>
+
+            <label for="clientesAfectados">Clientes Afectados:</label>
+            <input type="text" id="clientesAfectados" name="clientesAfectados" required>
+
+            <label for="horaReporte">Hora del Reporte:</label>
+      <input type="text" id="horaReporte" name="horaReporte" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}" placeholder="HH:MM:SS" required>
+
+            <label for="horaAtencion">Hora de Atención:</label>
+            <input type="time" id="horaAtencion" name="horaAtencion">
+
+            <label for="fechaCreacion">Fecha de Creación:</label>
+            <input type="text" id="fechaCreacion" name="fechaCreacion" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}" placeholder="HH:MM:SS" required=""
+
+            <label for="horaCreacion">Hora de Creación:</label>
+            <input type="text" id="horaCreacion" name="horaCreacion" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}" placeholder="HH:MM:SS" required=""
+        </fieldset>
+
+        <fieldset>
+            <legend>Comentarios</legend>
+            <label for="datosAdicionales">Datos Adicionales:</label>
+            <textarea id="datosAdicionales" name="datosAdicionales" rows="4"></textarea>
+        </fieldset>
+
+        <fieldset>
+            <legend>Status</legend>
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="1">De su apoyo para la atención</option>
+                <option value="2">Cliente confirma que cuenta con energía eléctrica</option>
+                <option value="3">Se confirma ausencia de CFE</option>
+                <option value="4">Cliente no contesta de su apoyo para la atención</option>
+                <option value="5">Zona conflictiva de su apoyo para la atención a primera hora de la mañana</option>
+                <option value="6">Sin personal nocturno de su apoyo para la atención a primera hora de la mañana</option>
+                <option value="7">Mal clima en la zona</option>
+                <option value="8">Sin esquema de guarda nocturno</option>
+                <option value="9">Clientes no se encuentran en domicilio</option>
+            </select>
+        </fieldset>
+
+        <button type="submit">Enviar</button>
+        <button type="button" id="copiarDatos">Copiar Datos</button>
+    </form>
+    <script src="popup.js"></script>
+</body>
+</html>
