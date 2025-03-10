@@ -1,60 +1,55 @@
-function extraerInformacion(ejemplo) {
-    // Expresiones regulares para extraer cada parte de la información
-    const regexFechaHora = /(\d{1,2}\/\d{1,2}\/\d{4}) (\d{1,2}:\d{2}:\d{2} [AP]M)/;
-    const regexTituloFalla = /;&;[^;]+;&;([^;]+);&;/;
-    const regexSucursal = /;&;[^;]+;&;[^;]+;&;([^;]+);&;(\d+);&;/;
-    const regexNodoPuerto = /;&;(\d{4});&;/;
+/*RESULTADO{ FechayHora: '12/24/2024 2:36:14 AM',
+  'Descripción': 'TXP_CBR8_3_HUB03, Revisar Puerto 10.0.20.3, R01,0021,089,2,1,3-Lejano - cable3/0/5.1, TOTAL CM: (271) CM OFFLINE(141), DM Alarm: (15551065),b0da.f909.dfef,bc9b.68ff.2d82,bcca.b522.e3c2,bcd1.65bf.92e0,bcd1.65c2.1ea0,c0b5.d7f6.4826,c0b5.d7fa.2128,c0b5.d7fa.3b68,c0b5.d7fb.763e,c852.6181.c02f,c852.6182.3820,c863.fc27.af55,cc0d.eceb.9c1e,d405.98d7.1942,d46a.6af2.ae4f,d80f.99b5.1f96,dc36.0c6b.fe08,dca2.6685.df36,dceb.6975.0ef8,e86f.38f9.91a2,ec5c.68fa.37b3,f44b.2ae0.f930,f8da.0c8c.58dc,f8da.0c91.0657,f8da.0cfa.6586,',
+  'Título': 'MEG,Golfo,Tlapacoyan, Planta Externa, ,Distribucion, R01,0021, 0021, SALIDA PARCIAL CONCURRENTE, 10.0.20.3 - R01,0021,89 - 3/0/5.1 - CM TOTAL(271) - CM OFFLINE: (141) ',
+  Nodo: '0021',
+  Sucursal: 'Tlapacoyan',
+  numerodesucursal: '89',
+  fechaDeCreacion: '12/24/2024',
+  horaDeCreacion: '2:36:14 AM' }*/
 
-    // Extraer fecha y hora
-    const fechaHora = ejemplo.match(regexFechaHora);
-    const fechaCreacion = fechaHora ? fechaHora[1] : null;
-    let horaCreacion = fechaHora ? fechaHora[2] : null;
-    // Cambiar formato de la hora a "A.M." o "P.M."
-    if (horaCreacion) {
-        horaCreacion = horaCreacion.replace("AM", "A.M.").replace("PM", "P.M.");
+// Texto de entrada
+const texto = `12/24/2024 2:36:14 AM;&;TXP_CBR8_3_HUB03, Revisar Puerto 10.0.20.3, R01,0021,089,2,1,3-Lejano - cable3/0/5.1, TOTAL CM: (271) CM OFFLINE(141), DM Alarm: (15551065),b0da.f909.dfef,bc9b.68ff.2d82,bcca.b522.e3c2,bcd1.65bf.92e0,bcd1.65c2.1ea0,c0b5.d7f6.4826,c0b5.d7fa.2128,c0b5.d7fa.3b68,c0b5.d7fb.763e,c852.6181.c02f,c852.6182.3820,c863.fc27.af55,cc0d.eceb.9c1e,d405.98d7.1942,d46a.6af2.ae4f,d80f.99b5.1f96,dc36.0c6b.fe08,dca2.6685.df36,dceb.6975.0ef8,e86f.38f9.91a2,ec5c.68fa.37b3,f44b.2ae0.f930,f8da.0c8c.58dc,f8da.0c91.0657,f8da.0cfa.6586,;&;MEG,Golfo,Tlapacoyan, Planta Externa, ,Distribucion, R01,0021, 0021, SALIDA PARCIAL CONCURRENTE, 10.0.20.3 - R01,0021,89 - 3/0/5.1 - CM TOTAL(271) - CM OFFLINE: (141) ;&;0021;&;Tlapacoyan;&;89;&;;&;VAEE=ACC
+rev no match de etiqueta  | OTTime: 2024-12-24 02:53:07;&;NA;&;NA;&;NA;&;NA;&;`;
+
+// Función para extraer y organizar la información
+function organizarInformacion(texto) {
+    // Dividir el texto por el separador ";&;"
+    const partes = texto.split(";&;");
+
+    // Validar que el texto tenga el formato esperado
+    if (partes.length < 7) {
+        throw new Error("El texto no tiene el formato esperado.");
     }
 
-    // Extraer título de la falla
-    const tituloFallaMatch = ejemplo.match(regexTituloFalla);
-    const tituloFalla = tituloFallaMatch ? tituloFallaMatch[1].trim() : null;
+    // Extraer cada campo con validaciones
+    const fechaHora = partes[0];
+    const descripcion = partes[1]; 
+    const titulos = partes[2];
+    const nodo = partes[3];
+    const zucursal = partes[4];
+    const numeroDeSucursal = partes[5];
 
-    // Extraer sucursal y número de sucursal
-    const sucursalInfo = ejemplo.match(regexSucursal);
-    const sucursal = sucursalInfo ? sucursalInfo[1].trim() : null;
-    const numeroSucursal = sucursalInfo ? sucursalInfo[2] : null;
 
-    // Extraer nodo/puerto
-    const nodoPuertoMatch = ejemplo.match(regexNodoPuerto);
-    const nodoPuerto = nodoPuertoMatch ? nodoPuertoMatch[1] : null;
 
-    // Guardar la información en un objeto
-    const resultado = {
-        fechaCreacion,
-        horaCreacion,
-        sucursal,
-        numeroSucursal,
-        tituloFalla,
-        nodoPuerto
+    // Crear un objeto con la información organizada
+    const informacionOrganizada = {
+        "FechayHora": fechaHora,
+        "Descripción": descripcion,
+        "Título": titulos,
+        "Nodo": nodo,
+        "Sucursal": zucursal,
+        "numerodesucursal": numeroDeSucursal,
     };
 
-    // Rellenar el formulario con los datos extraídos
-    document.getElementById('fechaCreacion').value = resultado.fechaCreacion;
-    document.getElementById('horaCreacion').value = resultado.horaCreacion;
-    document.getElementById('sucursal').value = resultado.sucursal;
-    document.getElementById('numeroSucursal').value = resultado.numeroSucursal;
-    document.getElementById('tituloFalla').value = resultado.tituloFalla;
-    document.getElementById('nodoPuerto').value = resultado.nodoPuerto;
-
-    return resultado;
+    fecha = informacionOrganizada.FechayHora.split(" ");
+    informacionOrganizada.fechaDeCreacion = fecha[0];
+    informacionOrganizada.horaDeCreacion = fecha[1] + " " + fecha[2];;
+    return informacionOrganizada;
 }
 
-// Ejemplo de uso
-const ejemplo3 = `3/6/2025 8:49:52 AM;&;TOL_C100G_08_HUB09, Revisar Puerto 10.0.196.72, H09,1240,264,1,1,0,250CP,32DS,Esq_5,RT03,04,01 - Logical Upstream Channel 9/6.0/0, TOTAL CM: (35) CM OFFLINE(35), DM Alarm: (38721804)6c55.e8d4.f1ad,7440.bbfb.1e30,ec5c.68ef.5bdf,f44c.70ac.fa17,10a7.9327.3728,1411.5d03.5656,5c7d.7d02.3c35,603d.2624.fd2a,f44c.70a4.6e2c,10a7.9327.7bf0,989d.5d65.944f,c0b5.d7fb.ba3c,c0b5.d7fc.2e2e,d89c.67de.58c5,d89c.67f5.0c9c,f44b.2ae3.ffd2,f44c.70a5.7dd7,9032.4bc6.a138,dc36.0c91.5840,ec5c.68ef.b0e7,f44c.70a9.eef7,1062.d085.b9c7,1062.d0a9.5ccd,1494.484d.5658,38fa.ca38.3f7d,48bd.ce43.af44,6c55.e8d3.5938,9cc8.fc73.10ec,a811.fc1d.e4b3,f44c.709f.ce88,f44c.70a2.c1ae,10a7.9326.79d0,1494.488d.8910,38fa.ca39.1976,48bd.ce03.aea0,7003.7e8a.835e,7003.7e96.8606,748a.0dea.f870,749b.e864.b058,989d.5d67.cb70,ac4c.a575.d2e4,b85e.71b1.041b,b85e.71b4.0ceb,f44c.70aa.b940,105b.adf3.8a37,1062.d095.8d74,1494.4842.a2e4,4023.43e9.cff7,481d.70a8.a8a8,48bd.ce03.acd0,48bd.ce3f.2dac,5095.519c.41e9,54a6.5c62.1d98,603d.26d5.7750,6c55.e8d5.a99a,ac4c.a574.c7ac,b85e.71b4.4dc3,c83f.b42c.1c52,d46a.6af3.7c58,f44c.70ad.024d,f88b.3732.f747,001d.d43f.5c92,1056.112a.9866,1494.4884.6044,1494.4888.0b3c,38fa.ca38.c972,3c04.61cc.e43b,441c.1221.9e90,7003.7e89.06be,7003.7e96.5e3e,9852.4a5c.1501,9852.4a5c.a412,ac4c.a573.2e84,b85e.71b0.fdfb,b85e.71b3.ec1b,d89c.67de.eb08,dceb.6972.85c0,f44c.709f.a964,f8ed.a5b8.e0e2,1062.d095.5935,1093.97da.eab6,10a7.9326.4a08,1494.484d.5cb8,1494.4884.5e64,1494.4884.6100,1494.4885.3874,18b8.1fb3.a147,283a.4d9a.eb2d,2c95.69ea.36e3,384c.90b2.0f32,441c.1222.1d68,485f.99f5.ec02,48bd.ce03.c900,48bd.cef6.96d3,7440.bbfd.4aa2,80d0.4a15.b1d4,889e.68ca.2d9e,9cc8.fc73.b2f9,ac4c.a576.1a0c,b85e.71b4.0df3,b85e.71b4.428b,bcd1.653d.9254,c0a0.0d0e.cf41,dceb.6972.a1d0,ec5c.68fb.ed47,f44c.70a7.2c83,0c96.e6f2.a935,1062.d093.b161,10a7.9327.45e8,10a7.9327.74c8,1494.4884.f190,1494.4885.3568,1494.4888.47c4,1494.4888.490c,1494.488d.8eb8,3468.95f3.0f7b,34bd.faea.6a00,384c.90ba.4e32,3cb7.4b5d.f6f4,485f.99f1.83ea,6814.01ab.af19,7003.7e8a.903e,80d0.4a0c.0bec,80d0.4aa5.f58c,986b.3d93.c192,989d.5d2f.7930,989d.5d68.2be7,9cc8.fc73.02d7,9cc8.fc73.0c91,acec.80c4.fb02,b42a.0ea6.3319,b85e.71b1.540b,b85e.71b4.469b,b85e.71b4.66ab,c0a0.0dc4.6894,c0b5.d7fc.1bf8,d89c.67f7.2692,f44c.70a3.fe22,f44c.70a5.385e,f44c.70a6.9c7d,f44c.70a9.da4b,105b.adf9.7f81,7440.bbfd.1469,ac4c.a573.483c,c83f.b4e0.7fa2,;&;MEG,Centro,Tiangistenco, Planta Externa, ,Distribucion, H09,1240, 1240, SALIDA TOTAL CONCURRENTE, 10.0.196.72 - H09,1240,264 - 9/6.0/0 - CM TOTAL(150) - CM OFFLINE: (150) ;&;1240;&;Tiangistenco;&;264;&;;&;;&;NA;&;NA;&;NA;&;NA;&;`;
 
-// Llamar a la función para rellenar el formulario al cargar la página
-window.onload = function () {
-    extraerInformacion(ejemplo3);
-};
+const resultado = organizarInformacion(texto);
+    console.log(resultado);
 
 /*
 12/26/2024 10:28:25 PM;&;QRO_OLT5800T_GPON_02_HUB07, Revisar FSP 172.31.164.79, 0/7/4 - 054,H07,02,RT31,02,03,T00, TOTAL CM: (29) CM OFFLINE(25), DM Alarm: (41920232)Serie:48575443B4BBBBA5|
